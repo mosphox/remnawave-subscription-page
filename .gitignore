@@ -142,3 +142,8 @@ docker-compose-local.yml
 /backend/.env
 
 /frontend/public/assets/.app-config-v2.json
+
+# Claude Code workspace + local dev notes
+.claude/
+DEV_TWEAKS.md
+memory/

@@ -1,20 +1,227 @@
+/* ========= Top-right action icons (unchanged) ========= */
+.actionIcon {
+    background: rgba(20, 16, 42, 0.55) !important;
+    border: 1px solid rgba(137, 110, 245, 0.3) !important;
+    color: #f5f0ff !important;
+    border-radius: 14px !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease !important;
+}
+
+.actionIcon:hover {
+    background: rgba(35, 26, 74, 0.7) !important;
+    border-color: rgba(255, 107, 53, 0.6) !important;
+    color: #ffb347 !important;
+}
+
+/* ========= Modal overlay — blurred backdrop (matches server modal) ========= */
+.modalOverlay {
+    background: rgba(10, 8, 18, 0.5) !important;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* ========= Modal shell ========= */
 .modalContent {
-    background: rgba(22, 27, 35, 0.95);
+    background: rgba(20, 16, 42, 0.95) !important;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #382d5e !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    max-width: 480px !important;
+    width: 100% !important;
 }
 
 .modalHeader {
-    background: transparent;
+    background: transparent !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    pointer-events: none;
 }
 
-.modalTitle {
+.modalBodyWrap {
+    padding: 0 !important;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.modalClose {
+    pointer-events: auto;
+    margin: 14px 14px 0 0 !important;
+    color: #a89db8 !important;
+    background: rgba(20, 16, 42, 0.6) !important;
+    border: 1px solid #2c1f5a !important;
+    border-radius: 10px !important;
+    width: 34px !important;
+    height: 34px !important;
+    transition:
+        color 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease,
+        transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modalClose:hover {
+    color: #f5f0ff !important;
+    background: rgba(35, 26, 74, 0.9) !important;
+    border-color: rgba(255, 107, 53, 0.55) !important;
+    transform: rotate(90deg);
+}
+
+.modalClose:active {
+    transform: rotate(90deg) scale(0.9);
+}
+
+/* ========= Modal body ========= */
+.modalBody {
+    padding: 22px 22px 22px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 4px;
+    padding-right: 48px;
+    min-width: 0;
+}
+
+.headLabel {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255, 107, 53, 0.18);
+    color: #ff6b35;
+    border: 1px solid rgba(255, 107, 53, 0.45);
+    white-space: nowrap;
+}
+
+.headName {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: #f5f0ff;
+    line-height: 1.1;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* ========= QR ========= */
+.qrSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.qrBox {
+    width: 240px;
+    height: 240px;
+    padding: 14px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(35, 26, 74, 0.9) 0%, rgba(20, 16, 42, 0.95) 100%);
+    border: 1px solid #2c1f5a;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 8px 24px -10px rgba(111, 63, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.qrBox::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 60% at 100% 0%, rgba(255, 107, 53, 0.08), transparent 65%),
+        radial-gradient(ellipse 60% 60% at 0% 100%, rgba(111, 63, 255, 0.08), transparent 65%);
+    pointer-events: none;
+}
+
+.qrBox > svg {
+    position: relative;
+    z-index: 1;
+}
+
+.qrCaption {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: #a89db8;
+    text-align: center;
+    max-width: 280px;
+}
+
+/* ========= Copy link button — outline only, subtle glow on hover ========= */
+.copyLinkBtn {
+    all: unset;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 18px;
+    border-radius: 12px;
+    color: #ff8057;
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
-    color: white;
+    font-size: 0.9rem;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    background:
+        linear-gradient(rgba(20, 16, 42, 0.95), rgba(20, 16, 42, 0.95)) padding-box,
+        linear-gradient(135deg, #ff6b35 0%, #ff3d7f 100%) border-box;
+    border: 1.5px solid transparent;
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+    transition: box-shadow 220ms ease, color 180ms ease;
 }
 
-.actionIcon {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.copyLinkBtn:hover {
+    color: #ffb347;
+    box-shadow:
+        0 0 0 1.5px rgba(255, 107, 53, 0.35),
+        0 0 22px -2px rgba(255, 61, 127, 0.35);
+}
+
+
+@media (max-width: 420px) {
+    .modalBody {
+        padding: 18px 16px 18px;
+    }
+
+    .head {
+        padding-right: 44px;
+    }
+
+    .headName {
+        font-size: 1.3rem;
+    }
+
+    .qrBox {
+        width: 220px;
+        height: 220px;
+    }
 }

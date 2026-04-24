@@ -1,50 +1,321 @@
-.cardItem {
-    padding: var(--mantine-spacing-sm);
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--mantine-radius-md);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+/* ============ HERO CARD ============ */
+.hero {
+    position: relative;
+    padding: clamp(22px, 4.5vw, 44px);
+    border-radius: 28px;
+    background:
+        linear-gradient(180deg, rgba(35, 26, 74, 0.78) 0%, rgba(20, 16, 42, 0.85) 100%);
+    border: 1px solid rgba(137, 110, 245, 0.22);
+    overflow: hidden;
+    box-shadow:
+        0 30px 80px -30px rgba(111, 63, 255, 0.35),
+        0 10px 40px -20px rgba(255, 107, 53, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
-.iconBlue {
-    background: linear-gradient(135deg, rgba(34, 139, 230, 0.2) 0%, rgba(28, 126, 214, 0.1) 100%);
-    border: 1px solid rgba(34, 139, 230, 0.3);
+/* Sunset gradient halo behind content */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: -20%;
+    width: 90%;
+    height: 120%;
+    background:
+        radial-gradient(ellipse 60% 50% at 40% 40%, rgba(255, 107, 53, 0.35), transparent 65%),
+        radial-gradient(ellipse 50% 40% at 70% 30%, rgba(255, 61, 127, 0.30), transparent 65%),
+        radial-gradient(ellipse 40% 30% at 20% 50%, rgba(247, 179, 43, 0.20), transparent 65%);
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 0;
+    animation: haloPulse 12s ease-in-out infinite alternate;
 }
 
-.iconCyan {
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
-    border: 1px solid rgba(34, 211, 238, 0.3);
+.hero::after {
+    content: '';
+    position: absolute;
+    right: -15%;
+    bottom: -40%;
+    width: 60%;
+    height: 80%;
+    background: radial-gradient(
+        ellipse 50% 50% at 50% 50%,
+        rgba(111, 63, 255, 0.35),
+        transparent 70%
+    );
+    filter: blur(50px);
+    pointer-events: none;
+    z-index: 0;
 }
 
-.iconGreen {
-    background: linear-gradient(135deg, rgba(64, 192, 87, 0.2) 0%, rgba(55, 178, 77, 0.1) 100%);
-    border: 1px solid rgba(64, 192, 87, 0.3);
+@keyframes haloPulse {
+    0% { opacity: 0.8; transform: translate3d(0, 0, 0); }
+    100% { opacity: 1; transform: translate3d(3%, 2%, 0); }
 }
 
-.iconTeal {
-    background: linear-gradient(135deg, rgba(32, 201, 151, 0.2) 0%, rgba(18, 184, 134, 0.1) 100%);
-    border: 1px solid rgba(32, 201, 151, 0.3);
+.heroInner {
+    position: relative;
+    z-index: 1;
 }
 
-.iconRed {
-    background: linear-gradient(135deg, rgba(250, 82, 82, 0.2) 0%, rgba(224, 49, 49, 0.1) 100%);
-    border: 1px solid rgba(250, 82, 82, 0.3);
+/* ============ TOP BAR (brand + actions) ============ */
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: clamp(28px, 5vw, 56px);
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.iconYellow {
-    background: linear-gradient(135deg, rgba(250, 176, 5, 0.2) 0%, rgba(245, 159, 0, 0.1) 100%);
-    border: 1px solid rgba(250, 176, 5, 0.3);
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 10px;
+    border-radius: 999px;
+    background: rgba(20, 16, 42, 0.55);
+    border: 1px solid rgba(137, 110, 245, 0.3);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
-.iconOrange {
-    background: linear-gradient(135deg, rgba(253, 126, 20, 0.2) 0%, rgba(247, 103, 7, 0.1) 100%);
-    border: 1px solid rgba(253, 126, 20, 0.3);
+.brandName {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff3d7f 60%, #c13d9b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
+/* ============ USERNAME HERO ============ */
+.usernameRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.usernameWrap {
+    min-width: 0;
+    flex: 1;
+}
+
+.username {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.7rem, 5.4vw, 3.8rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: #f5f0ff;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+}
+
+.usernameAccent {
+    background: linear-gradient(120deg, #ffb347 0%, #ff6b35 35%, #ff3d7f 70%, #a887ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.expiresLine {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: clamp(0.95rem, 2.1vw, 1.1rem);
+    color: #a89db8;
+    margin-top: 12px;
+    letter-spacing: 0;
+}
+
+/* ============ STATUS PILL (animated) ============ */
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 12px;
+    border-radius: 999px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    flex-shrink: 0;
+}
+
+.statusActive {
+    color: #7df9a3;
+    border-color: rgba(125, 249, 163, 0.4);
+    background: rgba(68, 212, 116, 0.1);
+    box-shadow: inset 0 0 20px rgba(125, 249, 163, 0.08);
+}
+
+.statusInactive {
+    color: #ff89b0;
+    border-color: rgba(255, 61, 127, 0.45);
+    background: rgba(255, 61, 127, 0.1);
+}
+
+.statusDot {
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.statusDot::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+    animation: statusPulse 1.8s ease-out infinite;
+}
+
+@keyframes statusPulse {
+    0% { transform: scale(0.6); opacity: 0.6; }
+    100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* ============ ASYMMETRIC META GRID ============ */
+.divider {
+    height: 1px;
+    margin: clamp(28px, 5vw, 44px) 0 clamp(22px, 4vw, 32px);
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0.5) 20%,
+        rgba(255, 61, 127, 0.5) 50%,
+        rgba(111, 63, 255, 0.5) 80%,
+        transparent 100%
+    );
+    opacity: 0.7;
+}
+
+.metaGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 38em) {
+    .metaGrid {
+        grid-template-columns: 1.3fr 1fr;
+        gap: 32px;
+    }
+}
+
+.metaCell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.metaLabel {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8c7cff;
+    opacity: 0.85;
+}
+
+.metaValue {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.15rem, 3vw, 2rem);
+    letter-spacing: -0.01em;
+    color: #f5f0ff;
+    line-height: 1.15;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+.metaValueMono {
+    font-family: 'Fira Mono', monospace;
+    font-weight: 500;
+    font-size: clamp(0.95rem, 2.4vw, 1.35rem);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.metaSub {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #a89db8;
+    margin-top: 2px;
+}
+
+/* ============ BANDWIDTH BAR ============ */
+.bandwidthBar {
+    position: relative;
+    height: 4px;
+    margin-top: 8px;
+    background: rgba(56, 45, 94, 0.6);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.bandwidthFill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #f7b32b 0%, #ff6b35 45%, #ff3d7f 90%);
+    border-radius: inherit;
+    box-shadow: 0 0 12px rgba(255, 107, 53, 0.6);
+}
+
+.bandwidthInfinity {
+    background: linear-gradient(
+        90deg,
+        #f7b32b 0%,
+        #ff6b35 25%,
+        #ff3d7f 50%,
+        #6f3fff 75%,
+        #f7b32b 100%
+    );
+    background-size: 200% 100%;
+    animation: bandwidthFlow 6s linear infinite;
+    width: 100%;
+}
+
+@keyframes bandwidthFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* ============ COMPATIBILITY (old classes still referenced) ============ */
+.iconBlue,
+.iconCyan,
+.iconGreen,
+.iconTeal,
+.iconRed,
+.iconYellow,
+.iconOrange,
 .iconViolet {
-    background: linear-gradient(135deg, rgba(151, 117, 250, 0.2) 0%, rgba(132, 94, 247, 0.1) 100%);
-    border: 1px solid rgba(151, 117, 250, 0.3);
+    background: rgba(35, 26, 74, 0.6);
+    border: 1px solid #382d5e;
 }
 
 .label {
@@ -57,4 +328,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.cardItem {
+    padding: var(--mantine-spacing-sm);
+    background: rgba(26, 20, 56, 0.5);
+    border: 1px solid #2c1f5a;
+    border-radius: var(--mantine-radius-lg);
+}
+
+.heroInner > :global(.mantine-Stack-root) {
+    gap: 0;
 }

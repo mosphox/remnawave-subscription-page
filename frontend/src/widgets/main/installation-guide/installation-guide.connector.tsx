@@ -4,17 +4,16 @@ import {
     TSubscriptionPagePlatformKey
 } from '@remnawave/subscription-page-types'
 import {
+    ActionIcon,
     Box,
-    Button,
     ButtonVariant,
     Card,
     Group,
-    NativeSelect,
+    Menu,
     Stack,
     Title,
     UnstyledButton
 } from '@mantine/core'
-import { notifications } from '@mantine/notifications'
 import { useClipboard } from '@mantine/hooks'
 import { useState } from 'react'
 import clsx from 'clsx'
@@ -96,11 +95,6 @@ export const InstallationGuideConnector = (props: IProps) => {
                 if (!formattedUrl) return
 
                 copy(formattedUrl)
-                notifications.show({
-                    title: t(baseTranslations.linkCopied),
-                    message: t(baseTranslations.linkCopiedToClipboard),
-                    color: 'cyan'
-                })
                 break
             }
             case 'external': {
@@ -120,29 +114,27 @@ export const InstallationGuideConnector = (props: IProps) => {
 
     const renderBlockButtons = (
         buttons: TSubscriptionPageButtonConfig[],
-        variant: ButtonVariant
+        _variant: ButtonVariant
     ) => {
         if (buttons.length === 0) return null
 
         return (
             <Group gap="xs" wrap="wrap">
                 {buttons.map((button, index) => (
-                    <Button
+                    <button
+                        className={classes.blockBtn}
                         key={index}
-                        leftSection={
-                            <span
-                                dangerouslySetInnerHTML={{
-                                    __html: getIconFromLibrary(button.svgIconKey, svgLibrary)
-                                }}
-                                style={{ display: 'flex', alignItems: 'center' }}
-                            />
-                        }
                         onClick={() => handleButtonClick(button)}
-                        radius="md"
-                        variant={variant}
+                        type="button"
                     >
+                        <span
+                            className={classes.blockBtnIcon}
+                            dangerouslySetInnerHTML={{
+                                __html: getIconFromLibrary(button.svgIconKey, svgLibrary)
+                            }}
+                        />
                         {t(button.text)}
-                    </Button>
+                    </button>
                 ))}
             </Group>
         )
@@ -154,43 +146,72 @@ export const InstallationGuideConnector = (props: IProps) => {
         <Card p={{ base: 'sm', xs: 'md', sm: 'lg', md: 'xl' }} radius="lg">
             <Stack gap="md">
                 <Group gap="sm" justify="space-between">
-                    <Title c="white" fw={600} order={4}>
+                    <Title
+                        c="white"
+                        fw={700}
+                        order={3}
+                        style={{
+                            fontFamily: 'Inter, sans-serif',
+                            fontSize: 'clamp(1.05rem, 2.2vw, 1.3rem)',
+                            letterSpacing: '-0.015em',
+                            margin: 0
+                        }}
+                    >
                         {t(baseTranslations.installationGuideHeader)}
                     </Title>
 
                     {availablePlatforms.length > 1 && (
-                        <NativeSelect
-                            data={availablePlatforms.map((opt) => ({
-                                value: opt.value,
-                                label: opt.label
-                            }))}
-                            leftSection={
-                                <span
-                                    dangerouslySetInnerHTML={{
-                                        __html: availablePlatforms.find(
-                                            (opt) => opt.value === selectedPlatform
-                                        )!.icon
-                                    }}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        width: 20,
-                                        height: 20
-                                    }}
-                                />
-                            }
-                            onChange={(event) => {
-                                vibrate([80])
-                                const value = event.target
-                                    .value as unknown as TSubscriptionPagePlatformKey
-                                setSelectedPlatform(value)
-                                setSelectedAppIndex(0)
-                            }}
-                            radius="md"
-                            size="sm"
-                            value={selectedPlatform}
-                            w={150}
-                        />
+                        <Menu position="bottom-end" width={200} withArrow={false} withinPortal>
+                            <Menu.Target>
+                                <ActionIcon
+                                    className="lang-picker-btn"
+                                    radius="md"
+                                    size="xl"
+                                    variant="default"
+                                >
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: availablePlatforms.find(
+                                                (opt) => opt.value === selectedPlatform
+                                            )!.icon
+                                        }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            width: 22,
+                                            height: 22
+                                        }}
+                                    />
+                                </ActionIcon>
+                            </Menu.Target>
+                            <Menu.Dropdown mah={280} style={{ overflowY: 'auto' }}>
+                                {availablePlatforms.map((opt) => (
+                                    <Menu.Item
+                                        key={opt.value}
+                                        leftSection={
+                                            <span
+                                                dangerouslySetInnerHTML={{ __html: opt.icon }}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: 18,
+                                                    height: 18
+                                                }}
+                                            />
+                                        }
+                                        onClick={() => {
+                                            vibrate([80])
+                                            setSelectedPlatform(opt.value)
+                                            setSelectedAppIndex(0)
+                                        }}
+                                    >
+                                        {opt.label}
+                                    </Menu.Item>
+                                ))}
+                            </Menu.Dropdown>
+                        </Menu>
                     )}
                 </Group>
 
@@ -205,8 +226,7 @@ export const InstallationGuideConnector = (props: IProps) => {
                                     <UnstyledButton
                                         className={clsx(
                                             classes.appButton,
-                                            isActive && classes.appButtonActive,
-                                            app.featured && classes.appButtonFeatured
+                                            isActive && classes.appButtonActive
                                         )}
                                         key={app.name}
                                         onClick={() => {
@@ -214,7 +234,6 @@ export const InstallationGuideConnector = (props: IProps) => {
                                             setSelectedAppIndex(index)
                                         }}
                                     >
-                                        {app.featured && <span className={classes.featuredBadge} />}
                                         {hasIcon && (
                                             <span
                                                 className={clsx(

@@ -1,0 +1,82 @@
+.card {
+    position: relative;
+    padding: clamp(22px, 3.5vw, 32px) clamp(22px, 3.5vw, 36px);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(35, 26, 74, 0.7) 0%, rgba(20, 16, 42, 0.8) 100%);
+    border: 1px solid rgba(137, 110, 245, 0.22);
+    overflow: hidden;
+    box-shadow:
+        0 20px 60px -30px rgba(111, 63, 255, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 50% 80% at 0% 50%, rgba(255, 107, 53, 0.22), transparent 60%),
+        radial-gradient(ellipse 40% 100% at 100% 50%, rgba(111, 63, 255, 0.22), transparent 60%);
+    filter: blur(28px);
+    z-index: 0;
+}
+
+.row {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-width: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    flex: 1;
+}
+
+.logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.55rem, 3.6vw, 2.1rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: #f5f0ff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+    .logo {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+    }
+
+    .brand {
+        gap: 12px;
+    }
+}

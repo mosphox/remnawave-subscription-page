@@ -1,43 +1,452 @@
-.modalContent {
-    background: rgba(22, 27, 35, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* ========= Outer list card ========= */
+.root {
+    position: relative;
+    padding: clamp(18px, 3vw, 28px);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(35, 26, 74, 0.7) 0%, rgba(20, 16, 42, 0.8) 100%);
+    border: 1px solid rgba(137, 110, 245, 0.22);
+    overflow: hidden;
+    box-shadow:
+        0 20px 60px -30px rgba(111, 63, 255, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
-.modalHeader {
-    background: transparent;
+.root::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 60% 60% at 0% 0%, rgba(255, 107, 53, 0.15), transparent 60%),
+        radial-gradient(ellipse 50% 60% at 100% 100%, rgba(111, 63, 255, 0.18), transparent 60%);
+    filter: blur(30px);
+    z-index: 0;
 }
 
-.modalTitle {
-    font-weight: 600;
-    color: white;
+.inner {
+    position: relative;
+    z-index: 1;
 }
 
-.keyBox {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--mantine-radius-md);
-}
-
-.keyRow {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: var(--mantine-spacing-xs);
-}
-
-.keyInfo {
+.header {
     display: flex;
     align-items: center;
-    gap: var(--mantine-spacing-xs);
-    min-width: 0;
-    overflow: hidden;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: clamp(14px, 2.5vw, 22px);
 }
 
-.keyName {
+.title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    letter-spacing: -0.015em;
+    color: #f5f0ff;
+    margin: 0;
+}
+
+.count {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #a89db8;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(137, 110, 245, 0.12);
+    border: 1px solid rgba(137, 110, 245, 0.22);
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ========= Config list item — compact, protocol pill on the right ========= */
+.item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(20, 16, 42, 0.55);
+    border: 1px solid #2c1f5a;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 160ms ease, background 160ms ease;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+}
+
+.item:hover {
+    background: rgba(35, 26, 74, 0.7);
+    border-color: color-mix(in srgb, var(--proto-color, #6852ff) 55%, transparent);
+}
+
+.itemBody {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.itemName {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+    color: #f5f0ff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
+    line-height: 1.25;
+}
+
+.itemHost {
+    font-family: 'Fira Mono', monospace;
+    font-size: 0.76rem;
+    color: #a89db8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.25;
+}
+
+.itemProto {
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 6px;
+    color: var(--proto-color, #6852ff);
+    background: color-mix(in srgb, var(--proto-color, #6852ff) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--proto-color, #6852ff) 40%, transparent);
+    white-space: nowrap;
+}
+
+.itemChevron {
+    flex-shrink: 0;
+    color: #7a6e95;
+    transition: color 160ms ease;
+}
+
+.item:hover .itemChevron {
+    color: var(--proto-color, #ff6b35);
+}
+
+@media (max-width: 480px) {
+    .item {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .itemProto {
+        font-size: 0.58rem;
+        padding: 3px 7px;
+    }
+}
+
+/* ========= Modal overlay — blurred backdrop ========= */
+.modalOverlay {
+    background: rgba(10, 8, 18, 0.5) !important;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* ========= Modal shell ========= */
+.modalContent {
+    background: rgba(20, 16, 42, 0.95) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid #382d5e !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    max-width: 480px !important;
+    width: 100% !important;
+}
+
+.modalHeader {
+    background: transparent !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.modalBodyWrap {
+    padding: 0 !important;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* ========= Close button — no translateY, use rotate + scale ========= */
+.modalClose {
+    pointer-events: auto;
+    margin: 14px 14px 0 0 !important;
+    color: #a89db8 !important;
+    background: rgba(20, 16, 42, 0.6) !important;
+    border: 1px solid #2c1f5a !important;
+    border-radius: 10px !important;
+    width: 34px !important;
+    height: 34px !important;
+    transition:
+        color 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease,
+        transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.modalClose:hover {
+    color: #f5f0ff !important;
+    background: rgba(35, 26, 74, 0.9) !important;
+    border-color: rgba(255, 107, 53, 0.55) !important;
+    transform: rotate(90deg);
+}
+
+.modalClose:active {
+    transform: rotate(90deg) scale(0.9);
+}
+
+/* ========= Modal body content ========= */
+.modalBody {
+    padding: 22px 22px 22px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Modal header (inside body) */
+.head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-right: 48px;
+    min-width: 0;
+}
+
+.headProto {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--proto-color, #6852ff) 18%, transparent);
+    color: var(--proto-color, #6852ff);
+    border: 1px solid color-mix(in srgb, var(--proto-color, #6852ff) 45%, transparent);
+    white-space: nowrap;
+}
+
+.headName {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: #f5f0ff;
+    line-height: 1.1;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* ========= Field grid ========= */
+.fieldsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #2c1f5a;
+    border: 1px solid #2c1f5a;
+    border-radius: 14px;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(20, 16, 42, 0.85);
+    min-height: 42px;
+    min-width: 0;
+    transition: background 140ms ease;
+}
+
+.field:hover {
+    background: rgba(35, 26, 74, 0.85);
+}
+
+.fieldLabel {
+    flex-shrink: 0;
+    width: 76px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8c7cff;
+}
+
+.fieldValue {
+    flex: 1;
+    min-width: 0;
+    font-family: 'Fira Mono', monospace;
+    font-size: 0.82rem;
+    color: #f5f0ff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fieldCopy {
+    all: unset;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    color: #7a6e95;
+    transition: color 140ms ease, background 140ms ease;
+}
+
+.fieldCopy:hover {
+    color: #ff8057;
+    background: rgba(255, 107, 53, 0.12);
+}
+
+.fieldCopyOk {
+    color: #f7b32b !important;
+    background: rgba(247, 179, 43, 0.12) !important;
+}
+
+/* ========= QR ========= */
+.qrSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.qrBox {
+    width: 220px;
+    height: 220px;
+    padding: 14px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(35, 26, 74, 0.9) 0%, rgba(20, 16, 42, 0.95) 100%);
+    border: 1px solid #2c1f5a;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 8px 24px -10px rgba(111, 63, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.qrBox::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 60% at 100% 0%, rgba(255, 107, 53, 0.08), transparent 65%),
+        radial-gradient(ellipse 60% 60% at 0% 100%, rgba(111, 63, 255, 0.08), transparent 65%);
+    pointer-events: none;
+}
+
+.qrBox > svg {
+    position: relative;
+    z-index: 1;
+}
+
+.qrCaption {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: #a89db8;
+    text-align: center;
+}
+
+/* ========= Copy link button — outline only, subtle glow on hover ========= */
+.copyLinkBtn {
+    all: unset;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 14px;
+    border-radius: 12px;
+    color: #ff8057;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    background:
+        linear-gradient(rgba(20, 16, 42, 0.95), rgba(20, 16, 42, 0.95)) padding-box,
+        linear-gradient(135deg, #ff6b35 0%, #ff3d7f 100%) border-box;
+    border: 1.5px solid transparent;
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+    transition: box-shadow 220ms ease, color 180ms ease;
+}
+
+.copyLinkBtn:hover {
+    color: #ffb347;
+    box-shadow:
+        0 0 0 1.5px rgba(255, 107, 53, 0.35),
+        0 0 22px -2px rgba(255, 61, 127, 0.35);
+}
+
+
+/* ========= Narrow screens ========= */
+@media (max-width: 420px) {
+    .modalBody {
+        padding: 18px 16px 18px;
+    }
+
+    .head {
+        padding-right: 44px;
+    }
+
+    .headName {
+        font-size: 1.3rem;
+    }
+
+    .fieldLabel {
+        width: 66px;
+    }
+
+    .field {
+        padding: 9px 12px;
+    }
+
+    .qrBox {
+        width: 200px;
+        height: 200px;
+    }
 }

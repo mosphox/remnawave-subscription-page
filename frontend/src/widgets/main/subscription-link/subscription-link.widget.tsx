@@ -6,14 +6,14 @@ import {
     IconLink,
     IconMessageChatbot
 } from '@tabler/icons-react'
-import { ActionIcon, Button, Group, Image, Stack, Text } from '@mantine/core'
-import { notifications } from '@mantine/notifications'
+import { ActionIcon, Group } from '@mantine/core'
 import { useClipboard } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
-import { renderSVG } from 'uqr'
+import { useState } from 'react'
 
 import { constructSubscriptionUrl } from '@shared/utils/construct-subscription-url'
 import { useSubscription } from '@entities/subscription-info-store'
+import { QrTiles } from '@shared/ui'
 import { vibrate } from '@shared/utils/vibrate'
 import { useTranslation } from '@shared/hooks'
 
@@ -24,52 +24,79 @@ interface IProps {
     supportUrl: string
 }
 
+const CopyLinkButton = ({ value }: { value: string }) => {
+    const { copy } = useClipboard()
+    const [copied, setCopied] = useState(false)
+
+    const handleClick = () => {
+        vibrate('drop')
+        copy(value)
+        setCopied(true)
+        window.setTimeout(() => setCopied(false), 5400)
+    }
+
+    return (
+        <button className={classes.copyLinkBtn} onClick={handleClick} type="button">
+            <IconCopy size={18} />
+            {copied ? 'Link copied' : 'Copy link'}
+        </button>
+    )
+}
+
+const LinkModalContent = ({ subscriptionUrl, title }: { subscriptionUrl: string; title: string }) => {
+    const { t, baseTranslations } = useTranslation()
+
+    return (
+        <div className={classes.modalBody}>
+            <div className={classes.head}>
+                <span className={classes.headLabel}>{t(baseTranslations.getLink)}</span>
+                <span className={classes.headName}>{title}</span>
+            </div>
+
+            <div className={classes.qrSection}>
+                <div className={classes.qrBox}>
+                    <QrTiles value={subscriptionUrl} gradientId="qrSunsetGetLink" />
+                </div>
+                <span className={classes.qrCaption}>
+                    {t(baseTranslations.scanQrCodeDescription)}
+                </span>
+            </div>
+
+            <CopyLinkButton value={subscriptionUrl} />
+        </div>
+    )
+}
+
 export const SubscriptionLinkWidget = ({ supportUrl, hideGetLink }: IProps) => {
     const { t, baseTranslations } = useTranslation()
     const subscription = useSubscription()
-    const clipboard = useClipboard({ timeout: 10000 })
 
     const subscriptionUrl = constructSubscriptionUrl(
         window.location.href,
         subscription.user.shortUuid
     )
 
-    const handleCopy = () => {
-        notifications.show({
-            title: t(baseTranslations.linkCopied),
-            message: t(baseTranslations.linkCopiedToClipboard),
-            color: 'cyan'
-        })
-        clipboard.copy(subscriptionUrl)
-    }
-
     const renderSupportLink = (supportUrl: string) => {
         const iconConfig = {
-            't.me': { icon: IconBrandTelegram, color: '#0088cc' },
-            'discord.com': { icon: IconBrandDiscord, color: '#5865F2' },
-            'vk.com': { icon: IconBrandVk, color: '#0077FF' }
+            't.me': IconBrandTelegram,
+            'discord.com': IconBrandDiscord,
+            'vk.com': IconBrandVk
         }
 
         const matchedPlatform = Object.entries(iconConfig).find(([domain]) =>
             supportUrl.includes(domain)
         )
 
-        const { icon: Icon, color } = matchedPlatform
-            ? matchedPlatform[1]
-            : { icon: IconMessageChatbot, color: 'cyan' }
+        const Icon = matchedPlatform ? matchedPlatform[1] : IconMessageChatbot
 
         return (
             <ActionIcon
-                c={color}
+                className={classes.actionIcon}
                 component="a"
                 href={supportUrl}
                 radius="md"
                 rel="noopener noreferrer"
                 size="xl"
-                style={{
-                    background: 'rgba(255, 255, 255, 0.02)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
                 target="_blank"
                 variant="default"
             >
@@ -80,43 +107,28 @@ export const SubscriptionLinkWidget = ({ supportUrl, hideGetLink }: IProps) => {
 
     const handleGetLink = () => {
         vibrate('tap')
-
-        const subscriptionQrCode = renderSVG(subscriptionUrl, {
-            whiteColor: '#161B22',
-            blackColor: '#22d3ee'
-        })
-
         modals.open({
             centered: true,
-            title: t(baseTranslations.getLink),
+            withCloseButton: true,
+            title: null,
+            padding: 0,
+            size: 480,
             classNames: {
                 content: classes.modalContent,
                 header: classes.modalHeader,
-                title: classes.modalTitle
+                body: classes.modalBodyWrap,
+                close: classes.modalClose,
+                overlay: classes.modalOverlay
+            },
+            overlayProps: {
+                backgroundOpacity: 0.35,
+                blur: 10
             },
             children: (
-                <Stack align="center">
-                    <Image
-                        src={`data:image/svg+xml;utf8,${encodeURIComponent(subscriptionQrCode)}`}
-                        style={{ borderRadius: 'var(--mantine-radius-md)' }}
-                    />
-                    <Text c="white" fw={600} size="lg" ta="center">
-                        {t(baseTranslations.scanQrCode)}
-                    </Text>
-                    <Text c="dimmed" size="sm" ta="center">
-                        {t(baseTranslations.scanQrCodeDescription)}
-                    </Text>
-
-                    <Button
-                        fullWidth
-                        leftSection={<IconCopy />}
-                        onClick={handleCopy}
-                        radius="md"
-                        variant="light"
-                    >
-                        {t(baseTranslations.copyLink)}
-                    </Button>
-                </Stack>
+                <LinkModalContent
+                    subscriptionUrl={subscriptionUrl}
+                    title={subscription.user.username}
+                />
             )
         })
     }

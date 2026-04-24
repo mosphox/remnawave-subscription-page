@@ -1,3 +1,4 @@
+export * from './header-card'
 export * from './installation-guide'
 export * from './raw-keys'
 export * from './subscription-info'

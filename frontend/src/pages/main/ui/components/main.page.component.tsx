@@ -1,21 +1,20 @@
-import { Box, Center, Container, Group, Image, Stack, Title } from '@mantine/core'
+import { Container, Stack } from '@mantine/core'
 import { TSubscriptionPagePlatformKey } from '@remnawave/subscription-page-types'
 
 import {
     AccordionBlockRenderer,
     CardsBlockRenderer,
+    HeaderCardWidget,
     InstallationGuideConnector,
     MinimalBlockRenderer,
     RawKeysWidget,
     SubscriptionInfoCardsWidget,
     SubscriptionInfoCollapsedWidget,
     SubscriptionInfoExpandedWidget,
-    SubscriptionLinkWidget,
     TimelineBlockRenderer
 } from '@widgets/main'
-import { useAppConfig, useAppConfigStoreActions, useCurrentLang } from '@entities/app-config-store'
-import { LanguagePicker } from '@shared/ui/language-picker/language-picker.shared'
-import { Page, RemnawaveLogo } from '@shared/ui'
+import { useAppConfig } from '@entities/app-config-store'
+import { Page } from '@shared/ui'
 
 interface IMainPageComponentProps {
     isMobile: boolean
@@ -38,17 +37,6 @@ const SUBSCRIPTION_INFO_BLOCK_RENDERERS = {
 
 export const MainPageComponent = ({ isMobile, platform }: IMainPageComponentProps) => {
     const config = useAppConfig()
-    const currentLang = useCurrentLang()
-    const { setLanguage } = useAppConfigStoreActions()
-
-    const brandName = config.brandingSettings.title
-    let hasCustomLogo = !!config.brandingSettings.logoUrl
-
-    if (hasCustomLogo) {
-        if (config.brandingSettings.logoUrl.includes('docs.rw')) {
-            hasCustomLogo = false
-        }
-    }
 
     const hasPlatformApps: Record<TSubscriptionPagePlatformKey, boolean> = {
         ios: Boolean(config.platforms.ios?.apps.length),
@@ -67,49 +55,15 @@ export const MainPageComponent = ({ isMobile, platform }: IMainPageComponentProp
 
     return (
         <Page>
-            <Box className="header-wrapper" py="md">
-                <Container maw={1200} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-                    <Group justify="space-between">
-                        <Group gap="sm" style={{ userSelect: 'none' }} wrap="nowrap">
-                            {hasCustomLogo ? (
-                                <Image
-                                    alt="logo"
-                                    fit="contain"
-                                    src={config.brandingSettings.logoUrl}
-                                    style={{
-                                        width: '32px',
-                                        height: '32px',
-                                        flexShrink: 0
-                                    }}
-                                />
-                            ) : (
-                                <RemnawaveLogo c="cyan" size={32} />
-                            )}
-                            <Title
-                                c={hasCustomLogo ? 'white' : 'cyan'}
-                                fw={700}
-                                order={4}
-                                size="lg"
-                            >
-                                {brandName}
-                            </Title>
-                        </Group>
-
-                        <SubscriptionLinkWidget
-                            hideGetLink={config.baseSettings.hideGetLinkButton}
-                            supportUrl={config.brandingSettings.supportUrl}
-                        />
-                    </Group>
-                </Container>
-            </Box>
-
             <Container
                 maw={1200}
                 px={{ base: 'md', sm: 'lg', md: 'xl' }}
-                py="xl"
+                py={{ base: 'lg', md: 'xl' }}
                 style={{ position: 'relative', zIndex: 1 }}
             >
                 <Stack gap="xl">
+                    <HeaderCardWidget />
+
                     {SubscriptionInfoBlockRenderer && (
                         <SubscriptionInfoBlockRenderer isMobile={isMobile} />
                     )}
@@ -126,14 +80,6 @@ export const MainPageComponent = ({ isMobile, platform }: IMainPageComponentProp
                     )}
 
                     <RawKeysWidget isMobile={isMobile} />
-
-                    <Center>
-                        <LanguagePicker
-                            currentLang={currentLang}
-                            locales={config.locales}
-                            onLanguageChange={setLanguage}
-                        />
-                    </Center>
                 </Stack>
             </Container>
         </Page>

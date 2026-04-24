@@ -49,22 +49,18 @@ export function LanguagePicker(props: IProps) {
     if (locales.length === 1) return null
 
     return (
-        <Menu position="bottom" width={150} withArrow={false} withinPortal>
+        <Menu position="bottom-end" width={180} withArrow={false} withinPortal>
             <Menu.Target>
                 <ActionIcon
-                    color="gray"
+                    className="lang-picker-btn"
                     radius="md"
                     size="xl"
-                    style={{
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}
                     variant="default"
                 >
                     <IconLanguage size={22} />
                 </ActionIcon>
             </Menu.Target>
-            <Menu.Dropdown mah={250} style={{ overflowY: 'auto' }}>{items}</Menu.Dropdown>
+            <Menu.Dropdown mah={280} style={{ overflowY: 'auto' }}>{items}</Menu.Dropdown>
         </Menu>
     )
 }

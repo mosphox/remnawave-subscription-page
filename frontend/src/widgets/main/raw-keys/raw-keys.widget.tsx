@@ -1,170 +1,171 @@
-import {
-    ActionIcon,
-    Badge,
-    Box,
-    Card,
-    CopyButton,
-    Group,
-    Image,
-    ScrollArea,
-    Stack,
-    Text,
-    Title
-} from '@mantine/core'
-import { IconCheck, IconCopy, IconKey, IconQrcode } from '@tabler/icons-react'
+import { IconChevronRight, IconCopy } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
-import { renderSVG } from 'uqr'
+import { useClipboard } from '@mantine/hooks'
+import { useState } from 'react'
 
+import {
+    parseConnectionLink,
+    ParsedConfig,
+    ParsedField,
+    PROTOCOL_COLOR
+} from '@shared/utils/parse-connection-link'
 import { useSubscription } from '@entities/subscription-info-store'
+import { QrTiles } from '@shared/ui'
 import { vibrate } from '@shared/utils/vibrate'
 import { useTranslation } from '@shared/hooks'
 
 import classes from './raw-keys.module.css'
 
-interface ParsedLink {
-    fullLink: string
-    name: string
-}
-
-const parseLinks = (links: string[]): ParsedLink[] => {
-    return links.map((link) => {
-        const hashIndex = link.lastIndexOf('#')
-        let name = 'Unknown'
-
-        if (hashIndex !== -1) {
-            const encodedName = link.substring(hashIndex + 1)
-            try {
-                name = decodeURIComponent(encodedName)
-            } catch {
-                name = encodedName
-            }
-        }
-
-        return {
-            name,
-            fullLink: link
-        }
-    })
-}
-
 interface IProps {
     isMobile: boolean
 }
 
-export const RawKeysWidget = ({ isMobile }: IProps) => {
+const FieldRow = ({ field }: { field: ParsedField }) => {
+    const { copy, copied } = useClipboard({ timeout: 1600 })
+
+    return (
+        <div className={classes.field}>
+            <span className={classes.fieldLabel}>{field.label}</span>
+            <span className={classes.fieldValue} title={field.value}>
+                {field.value}
+            </span>
+            <button
+                aria-label={`Copy ${field.label}`}
+                className={`${classes.fieldCopy} ${copied ? classes.fieldCopyOk : ''}`}
+                onClick={() => {
+                    vibrate('drop')
+                    copy(field.value)
+                }}
+                type="button"
+            >
+                {copied ? <IconCheck size={15} /> : <IconCopy size={15} />}
+            </button>
+        </div>
+    )
+}
+
+const CopyLinkButton = ({ value }: { value: string }) => {
+    const { copy } = useClipboard()
+    const [copied, setCopied] = useState(false)
+
+    const handleClick = () => {
+        vibrate('drop')
+        copy(value)
+        setCopied(true)
+        window.setTimeout(() => setCopied(false), 5400)
+    }
+
+    return (
+        <button className={classes.copyLinkBtn} onClick={handleClick} type="button">
+            <IconCopy size={18} />
+            {copied ? 'Link copied' : 'Copy link'}
+        </button>
+    )
+}
+
+const ConfigModalContent = ({ config }: { config: ParsedConfig }) => {
+    const color = PROTOCOL_COLOR[config.protocolSlug]
+
+    return (
+        <div
+            className={classes.modalBody}
+            style={{ ['--proto-color' as string]: color } as React.CSSProperties}
+        >
+            <div className={classes.head}>
+                <span className={classes.headProto}>{config.protocol}</span>
+                <span className={classes.headName} title={config.name}>
+                    {config.name}
+                </span>
+            </div>
+
+            <div className={classes.fieldsGrid}>
+                {config.fields.map((f, i) => (
+                    <FieldRow field={f} key={`${f.label}-${i}`} />
+                ))}
+            </div>
+
+            <div className={classes.qrSection}>
+                <div className={classes.qrBox}>
+                    <QrTiles value={config.fullLink} />
+                </div>
+                <span className={classes.qrCaption}>Scan to import</span>
+            </div>
+
+            <CopyLinkButton value={config.fullLink} />
+        </div>
+    )
+}
+
+export const RawKeysWidget = ({ isMobile: _ }: IProps) => {
     const { t, baseTranslations } = useTranslation()
     const subscription = useSubscription()
 
     if (subscription.links.length === 0) return null
 
-    const parsedLinks = parseLinks(subscription.links)
+    const parsed = subscription.links.map((link) => parseConnectionLink(link))
 
-    const handleShowQr = (link: ParsedLink) => {
-        const qrCode = renderSVG(link.fullLink, {
-            whiteColor: '#161B22',
-            blackColor: '#22d3ee'
-        })
-
+    const handleOpen = (config: ParsedConfig) => {
+        vibrate('tap')
         modals.open({
             centered: true,
-            title: link.name,
+            withCloseButton: true,
+            title: null,
+            padding: 0,
+            size: 480,
             classNames: {
                 content: classes.modalContent,
                 header: classes.modalHeader,
-                title: classes.modalTitle
+                body: classes.modalBodyWrap,
+                close: classes.modalClose,
+                overlay: classes.modalOverlay
             },
-            children: (
-                <Stack align="center">
-                    <Image
-                        src={`data:image/svg+xml;utf8,${encodeURIComponent(qrCode)}`}
-                        style={{ borderRadius: 'var(--mantine-radius-md)' }}
-                    />
-                    <Text c="dimmed" size="sm" ta="center">
-                        {t(baseTranslations.scanToImport)}
-                    </Text>
-                </Stack>
-            )
+            overlayProps: {
+                backgroundOpacity: 0.35,
+                blur: 10
+            },
+            children: <ConfigModalContent config={config} />
         })
     }
 
     return (
-        <Card p={{ base: 'sm', xs: 'md', sm: 'lg', md: 'xl' }} radius="lg">
-            <Stack gap="md">
-                <Group gap="sm" justify="space-between">
-                    <Title c="white" fw={600} order={4}>
+        <div className={classes.root}>
+            <div className={classes.inner}>
+                <div className={classes.header}>
+                    <h3 className={classes.title}>
                         {t(baseTranslations.connectionKeysHeader)}
-                    </Title>
-                    {parsedLinks.length > 1 && (
-                        <Badge color="cyan" size="lg" variant="light">
-                            {parsedLinks.length}
-                        </Badge>
+                    </h3>
+                    {parsed.length > 1 && (
+                        <span className={classes.count}>{parsed.length} configs</span>
                     )}
-                </Group>
+                </div>
 
-                <ScrollArea.Autosize mah={300} scrollbars="y">
-                    <Stack gap="xs">
-                        {parsedLinks.map((link, index) => (
-                            <Box className={classes.keyBox} key={index} p="xs">
-                                <Box className={classes.keyRow}>
-                                    <Box className={classes.keyInfo}>
-                                        <IconKey
-                                            size={isMobile ? 16 : 18}
-                                            style={{
-                                                color: 'var(--mantine-color-cyan-4)',
-                                                flexShrink: 0
-                                            }}
-                                        />
-                                        <Box className={classes.keyName}>
-                                            <Text
-                                                c="white"
-                                                fw={500}
-                                                size={isMobile ? 'xs' : 'sm'}
-                                                span
-                                            >
-                                                {link.name}
-                                            </Text>
-                                        </Box>
-                                    </Box>
-
-                                    <Group gap={4} wrap="nowrap">
-                                        <CopyButton value={link.fullLink}>
-                                            {({ copied, copy }) => (
-                                                <ActionIcon
-                                                    color={copied ? 'teal' : 'gray'}
-                                                    onClick={() => {
-                                                        vibrate('drop')
-                                                        copy()
-                                                    }}
-                                                    size={isMobile ? 'sm' : 'md'}
-                                                    variant="subtle"
-                                                >
-                                                    {copied ? (
-                                                        <IconCheck size={isMobile ? 14 : 16} />
-                                                    ) : (
-                                                        <IconCopy size={isMobile ? 14 : 16} />
-                                                    )}
-                                                </ActionIcon>
-                                            )}
-                                        </CopyButton>
-
-                                        <ActionIcon
-                                            color="cyan"
-                                            onClick={() => {
-                                                vibrate('tap')
-                                                handleShowQr(link)
-                                            }}
-                                            size={isMobile ? 'sm' : 'md'}
-                                            variant="subtle"
-                                        >
-                                            <IconQrcode size={isMobile ? 14 : 16} />
-                                        </ActionIcon>
-                                    </Group>
-                                </Box>
-                            </Box>
-                        ))}
-                    </Stack>
-                </ScrollArea.Autosize>
-            </Stack>
-        </Card>
+                <div className={classes.list}>
+                    {parsed.map((cfg, i) => {
+                        const color = PROTOCOL_COLOR[cfg.protocolSlug]
+                        return (
+                            <button
+                                className={classes.item}
+                                key={`${cfg.name}-${i}`}
+                                onClick={() => handleOpen(cfg)}
+                                style={{ ['--proto-color' as string]: color } as React.CSSProperties}
+                                type="button"
+                            >
+                                <div className={classes.itemBody}>
+                                    <span className={classes.itemName}>{cfg.name}</span>
+                                    {cfg.host && (
+                                        <span className={classes.itemHost}>{cfg.host}</span>
+                                    )}
+                                </div>
+                                <span className={classes.itemProto}>{cfg.protocol}</span>
+                                <IconChevronRight
+                                    className={classes.itemChevron}
+                                    size={18}
+                                />
+                            </button>
+                        )
+                    })}
+                </div>
+            </div>
+        </div>
     )
 }
