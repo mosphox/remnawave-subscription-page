@@ -1,4 +1,4 @@
-import { IconChevronRight, IconCopy } from '@tabler/icons-react'
+import { IconChevronRight, IconCopy, IconCheck } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { useClipboard } from '@mantine/hooks'
 import { useState } from 'react'

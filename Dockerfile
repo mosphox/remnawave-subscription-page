@@ -1,6 +1,12 @@
+FROM node:24.14-trixie-slim AS frontend-build
+WORKDIR /opt/app
+COPY frontend/package*.json ./
+RUN npm ci --legacy-peer-deps
+COPY frontend/ .
+RUN npm run start:build
+
 FROM node:24.14-trixie-slim AS backend-build
 WORKDIR /opt/app
-
 COPY backend/package*.json ./
 COPY backend/tsconfig.json ./
 COPY backend/tsconfig.build.json ./
@@ -32,7 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 COPY --from=backend-build /opt/app/dist ./dist
 COPY --from=backend-build /opt/app/node_modules ./node_modules
 
-COPY frontend/dist/ ./frontend/
+COPY --from=frontend-build /opt/app/dist ./frontend/
 
 COPY backend/package*.json ./
 
