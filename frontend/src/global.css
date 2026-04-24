@@ -8,7 +8,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Sunset-at-night aurora — fixed, soft, animated slow */
+/* Sunset-at-night aurora — static, GPU-light */
 body::before {
     content: '';
     position: fixed;
@@ -22,16 +22,7 @@ body::before {
         radial-gradient(ellipse 55% 45% at 100% 100%, rgba(111, 63, 255, 0.22), transparent 60%),
         radial-gradient(ellipse 50% 40% at 0% 95%, rgba(78, 63, 245, 0.18), transparent 60%);
     filter: blur(6px);
-    animation: auroraShift 24s ease-in-out infinite alternate;
-}
-
-@keyframes auroraShift {
-    0% {
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-    100% {
-        transform: translate3d(-2%, 1%, 0) scale(1.05);
-    }
+    will-change: auto;
 }
 
 /* Film grain overlay */
