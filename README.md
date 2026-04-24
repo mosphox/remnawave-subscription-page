@@ -6,6 +6,8 @@ Learn more about Remnawave [here](https://remna.st/).
 
 Frontend has been redesigned end-to-end. Backend is untouched from upstream.
 
+![Maelstrom subscription page](docs/example.png)
+
 ### Design system
 - New palette: deep indigo-violet base with sunset accent gradients (orange → pink → violet) and sage mint / warm rust for status colours. Replaces the original cyan/dark theme ([`theme.ts`](frontend/src/shared/constants/theme/theme.ts)).
 - Typography: **Inter** for body and display, **Fira Mono** for values / UUIDs. Fonts loaded from Google Fonts.
