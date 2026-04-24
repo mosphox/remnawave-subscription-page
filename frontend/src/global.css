@@ -2,23 +2,32 @@ html {
     min-height: 100vh;
     min-height: -webkit-fill-available;
     background-color: #0a0812;
-    background-image:
-        radial-gradient(ellipse 70% 45% at 20% -5%, rgba(255, 107, 53, 0.22), transparent 60%),
-        radial-gradient(ellipse 60% 45% at 90% 5%, rgba(255, 61, 127, 0.20), transparent 60%),
-        radial-gradient(ellipse 55% 40% at 55% 0%, rgba(247, 179, 43, 0.14), transparent 55%),
-        radial-gradient(ellipse 55% 45% at 100% 100%, rgba(111, 63, 255, 0.22), transparent 60%),
-        radial-gradient(ellipse 50% 40% at 0% 95%, rgba(78, 63, 245, 0.18), transparent 60%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
 }
 
 body {
     min-height: 100vh;
     min-height: -webkit-fill-available;
     color: #f5f0ff;
+    background: transparent !important;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Sunset aurora — static, fixed to viewport, painted once & compositor-cached */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: #0a0812;
+    background-image:
+        radial-gradient(ellipse 70% 45% at 20% -5%, rgba(255, 107, 53, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 45% at 90% 5%, rgba(255, 61, 127, 0.20), transparent 60%),
+        radial-gradient(ellipse 55% 40% at 55% 0%, rgba(247, 179, 43, 0.14), transparent 55%),
+        radial-gradient(ellipse 55% 45% at 100% 100%, rgba(111, 63, 255, 0.22), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 0% 95%, rgba(78, 63, 245, 0.18), transparent 60%);
 }
 
 #root {

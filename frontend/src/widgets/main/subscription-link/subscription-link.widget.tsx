@@ -134,7 +134,7 @@ export const SubscriptionLinkWidget = ({ supportUrl, hideGetLink }: IProps) => {
     }
 
     return (
-        <Group gap="xs" ml="auto" wrap="nowrap">
+        <Group gap="xs" wrap="nowrap">
             {!hideGetLink && (
                 <ActionIcon
                     className={classes.actionIcon}
