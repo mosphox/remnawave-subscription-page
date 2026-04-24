@@ -1,9 +1,7 @@
 .root {
     position: relative;
-    background: rgba(26, 20, 56, 0.55);
+    background: #14102a;
     border: 1px solid #2c1f5a;
     border-radius: 24px;
     overflow: hidden;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }

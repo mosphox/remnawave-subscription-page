@@ -3,16 +3,13 @@
     position: relative;
     padding: clamp(22px, 4.5vw, 44px);
     border-radius: 28px;
-    background:
-        linear-gradient(180deg, rgba(35, 26, 74, 0.78) 0%, rgba(20, 16, 42, 0.85) 100%);
-    border: 1px solid rgba(137, 110, 245, 0.22);
+    background: linear-gradient(180deg, #231a4a 0%, #14102a 100%);
+    border: 1px solid #382d5e;
     overflow: hidden;
     box-shadow:
         0 30px 80px -30px rgba(111, 63, 255, 0.35),
         0 10px 40px -20px rgba(255, 107, 53, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
 }
 
 /* Sunset gradient halo behind content — static, GPU-light */
@@ -70,10 +67,8 @@
     gap: 10px;
     padding: 6px 14px 6px 10px;
     border-radius: 999px;
-    background: rgba(20, 16, 42, 0.55);
-    border: 1px solid rgba(137, 110, 245, 0.3);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: #14102a;
+    border: 1px solid #382d5e;
 }
 
 .brandName {
@@ -144,8 +139,6 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     border: 1px solid;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     flex-shrink: 0;
 }
 
@@ -163,27 +156,11 @@
 }
 
 .statusDot {
-    position: relative;
     width: 7px;
     height: 7px;
     border-radius: 50%;
     background: currentColor;
     box-shadow: 0 0 10px currentColor;
-}
-
-.statusDot::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.5;
-    animation: statusPulse 1.8s ease-out infinite;
-}
-
-@keyframes statusPulse {
-    0% { transform: scale(0.6); opacity: 0.6; }
-    100% { transform: scale(1.9); opacity: 0; }
 }
 
 /* ============ ASYMMETRIC META GRID ============ */
@@ -284,19 +261,11 @@
     background: linear-gradient(
         90deg,
         #f7b32b 0%,
-        #ff6b35 25%,
-        #ff3d7f 50%,
-        #6f3fff 75%,
-        #f7b32b 100%
+        #ff6b35 40%,
+        #ff3d7f 70%,
+        #6f3fff 100%
     );
-    background-size: 200% 100%;
-    animation: bandwidthFlow 6s linear infinite;
     width: 100%;
-}
-
-@keyframes bandwidthFlow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
 }
 
 /* ============ COMPATIBILITY (old classes still referenced) ============ */

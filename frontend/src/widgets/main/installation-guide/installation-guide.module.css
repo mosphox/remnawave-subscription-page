@@ -14,18 +14,16 @@
     height: 52px;
     min-width: 0;
     overflow: hidden;
-    background: rgba(26, 20, 56, 0.5);
+    background: #14102a;
     border: 1px solid #2c1f5a;
     border-left: 3px solid #2c1f5a;
     border-radius: 16px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    transition: background 160ms ease, border-color 160ms ease;
 }
 
 .appButton:hover {
-    background: rgba(35, 26, 74, 0.6);
+    background: #1c1640;
     border-left-color: #6852ff;
 }
 
@@ -115,7 +113,7 @@
     cursor: pointer;
     box-sizing: border-box;
     background:
-        linear-gradient(rgba(20, 16, 42, 0.9), rgba(20, 16, 42, 0.9)) padding-box,
+        linear-gradient(#14102a, #14102a) padding-box,
         linear-gradient(135deg, #ff6b35 0%, #ff3d7f 100%) border-box;
     border: 1.5px solid transparent;
     box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);

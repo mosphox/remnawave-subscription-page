@@ -1,16 +1,14 @@
 .infoBlock {
     padding: var(--mantine-spacing-sm);
     border-radius: 16px;
-    background: rgba(26, 20, 56, 0.55);
+    background: #14102a;
     border: 1px solid #2c1f5a;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     transition: border-color 140ms ease, background 140ms ease;
 }
 
 .infoBlock:hover {
     border-color: rgba(137, 110, 245, 0.45);
-    background: rgba(35, 26, 74, 0.65);
+    background: #1c1640;
 }
 
 .blue,
@@ -21,6 +19,6 @@
 .yellow,
 .orange,
 .violet {
-    background: rgba(26, 20, 56, 0.55);
+    background: #14102a;
     border: 1px solid #2c1f5a;
 }
