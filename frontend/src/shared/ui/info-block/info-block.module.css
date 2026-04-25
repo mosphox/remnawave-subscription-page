@@ -6,9 +6,11 @@
     transition: border-color 140ms ease, background 140ms ease;
 }
 
-.infoBlock:hover {
-    border-color: rgba(137, 110, 245, 0.45);
-    background: #1c1640;
+@media (hover: hover) {
+    .infoBlock:hover {
+        border-color: rgba(137, 110, 245, 0.45);
+        background: #1c1640;
+    }
 }
 
 .blue,

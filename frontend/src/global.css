@@ -1,14 +1,10 @@
 html {
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    background-color: #0a0812;
-    background-image:
-        radial-gradient(ellipse 70% 45% at 20% -5%, rgba(255, 107, 53, 0.22), transparent 60%),
-        radial-gradient(ellipse 60% 45% at 90% 5%, rgba(255, 61, 127, 0.20), transparent 60%),
-        radial-gradient(ellipse 55% 40% at 55% 0%, rgba(247, 179, 43, 0.14), transparent 55%),
-        radial-gradient(ellipse 55% 45% at 100% 100%, rgba(111, 63, 255, 0.22), transparent 60%),
-        radial-gradient(ellipse 50% 40% at 0% 95%, rgba(78, 63, 245, 0.18), transparent 60%);
-    overscroll-behavior: none;
+    background-color: #000;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 200% 200%;
 }
 
 body {
@@ -17,30 +13,50 @@ body {
     color: #f5f0ff;
     background: transparent !important;
     position: relative;
-    overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Sunset aurora — static, fixed to viewport, painted once & compositor-cached */
+/* Layer 1: blurred-feel mesh gradient, fixed-position behind everything */
 body::before {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-color: transparent;
     height: -webkit-fill-available;
-    height: 100dvh;
+    background-image:
+        radial-gradient(ellipse 45% 35% at 12% 22%, rgba(255, 195, 90, 0.55), transparent 99%),
+        radial-gradient(ellipse 55% 45% at 22% 50%, rgba(255, 90, 50, 0.65), transparent 99%),
+        radial-gradient(ellipse 38% 32% at 82% 28%, rgba(255, 70, 140, 0.55), transparent 99%),
+        radial-gradient(ellipse 30% 38% at 8% 70%, rgba(195, 30, 75, 0.50), transparent 99%),
+        radial-gradient(ellipse 60% 55% at 88% 75%, rgba(135, 60, 230, 0.65), transparent 75%),
+        radial-gradient(ellipse 55% 35% at 45% 88%, rgba(60, 45, 175, 0.50), transparent 75%),
+        radial-gradient(ellipse 65% 45% at 55% 50%, rgba(255, 100, 160, 0.20), transparent 75%);
+}
+
+/* Layer 2: black fade clamping top + bottom edges */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-color: #0a0812;
-    background-image:
-        radial-gradient(ellipse 70% 45% at 20% -5%, rgba(255, 107, 53, 0.22), transparent 60%),
-        radial-gradient(ellipse 60% 45% at 90% 5%, rgba(255, 61, 127, 0.20), transparent 60%),
-        radial-gradient(ellipse 55% 40% at 55% 0%, rgba(247, 179, 43, 0.14), transparent 55%),
-        radial-gradient(ellipse 55% 45% at 100% 100%, rgba(111, 63, 255, 0.22), transparent 60%),
-        radial-gradient(ellipse 50% 40% at 0% 95%, rgba(78, 63, 245, 0.18), transparent 60%);
+    background: linear-gradient(
+        180deg,
+        #000 0%,
+        rgba(0, 0, 0, 0) 30%,
+        rgba(0, 0, 0, 0) 35%,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0) 50%,
+        rgba(0, 0, 0, 0) 60%,
+        rgba(0, 0, 0, 0) 65%,
+        #000 100%
+    );
 }
 
 #root {
@@ -75,10 +91,12 @@ body::before {
     transition: border-color 160ms ease, background 160ms ease, color 160ms ease !important;
 }
 
-.lang-picker-btn:hover {
-    background: #1c1640 !important;
-    border-color: #ff6b35 !important;
-    color: #ffb347 !important;
+@media (hover: hover) {
+    .lang-picker-btn:hover {
+        background: #1c1640 !important;
+        border-color: #ff6b35 !important;
+        color: #ffb347 !important;
+    }
 }
 
 /* Legacy info-card classes collapse to neutral deep-violet surface */

@@ -7,10 +7,12 @@
     transition: border-color 160ms ease, background 160ms ease, color 160ms ease !important;
 }
 
-.actionIcon:hover {
-    background: #1c1640 !important;
-    border-color: rgba(255, 107, 53, 0.6) !important;
-    color: #ffb347 !important;
+@media (hover: hover) {
+    .actionIcon:hover {
+        background: #1c1640 !important;
+        border-color: rgba(255, 107, 53, 0.6) !important;
+        color: #ffb347 !important;
+    }
 }
 
 /* ========= Modal overlay — solid dark scrim ========= */
@@ -61,11 +63,13 @@
         transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.modalClose:hover {
-    color: #f5f0ff !important;
-    background: #231a4a !important;
-    border-color: rgba(255, 107, 53, 0.55) !important;
-    transform: rotate(90deg);
+@media (hover: hover) {
+    .modalClose:hover {
+        color: #f5f0ff !important;
+        background: #231a4a !important;
+        border-color: rgba(255, 107, 53, 0.55) !important;
+        transform: rotate(90deg);
+    }
 }
 
 .modalClose:active {
@@ -131,9 +135,6 @@
     border-radius: 16px;
     background: linear-gradient(180deg, #1c1640 0%, #0f0c22 100%);
     border: 1px solid #2c1f5a;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.04),
-        0 8px 24px -10px rgba(111, 63, 255, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -193,11 +194,13 @@
     transition: box-shadow 220ms ease, color 180ms ease;
 }
 
-.copyLinkBtn:hover {
-    color: #ffb347;
-    box-shadow:
-        0 0 0 1.5px rgba(255, 107, 53, 0.35),
-        0 0 22px -2px rgba(255, 61, 127, 0.35);
+@media (hover: hover) {
+    .copyLinkBtn:hover {
+        color: #ffb347;
+        box-shadow:
+            0 0 0 1.5px rgba(255, 107, 53, 0.35),
+            0 0 22px -2px rgba(255, 61, 127, 0.35);
+    }
 }
 
 
